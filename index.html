@@ -1,175 +1,151 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juego Bienestar Digital</title>
-<style>
+  <meta charset="UTF-8">
+  <title>Juego del Circuito Eléctrico</title>
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f2f7f7;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 20px;
     }
-    .container {
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        width: 400px;
-        text-align: center;
-    }
+
     h1 {
-        color: #2c3e50;
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
     }
-    .pregunta {
-        font-size: 18px;
-        margin: 20px 0;
+
+    .circuito {
+      margin: 20px auto;
+      width: 520px;
+      min-height: 240px;
+      background: linear-gradient(135deg, #1a1a1a, #222, #111);
+      border: 4px solid #0f0;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 10px;
+      transition: background 0.5s, border 0.5s, box-shadow 0.5s;
+      box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0;
+      animation: energia 3s infinite linear;
     }
-    .opciones button {
-        margin: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        background-color: #3498db;
-        color: white;
-        transition: 0.3s;
+
+    /* Animación de energía */
+    @keyframes energia {
+      0% { box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0; }
+      50% { box-shadow: 0 0 35px #0ff, inset 0 0 15px #0ff; }
+      100% { box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0; }
     }
-    .opciones button:hover {
-        background-color: #2980b9;
+
+    .apagado {
+      background: #220000 !important;
+      border: 4px solid #f00 !important;
+      box-shadow: 0 0 25px #f00, inset 0 0 10px #f00 !important;
+      animation: parpadeo 0.5s infinite alternate;
     }
-    .mensaje {
-        margin-top: 15px;
-        font-weight: bold;
-        min-height: 24px;
+
+    /* Efecto parpadeo cuando explota */
+    @keyframes parpadeo {
+      from { opacity: 1; }
+      to { opacity: 0.7; }
     }
-    #siguiente {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        background-color: #2ecc71;
-        color: white;
-        transition: 0.3s;
+
+    .feliz {
+      background: #003300 !important;
+      border: 4px solid #0ff !important;
+      box-shadow: 0 0 40px #0ff, inset 0 0 20px #0ff !important;
+      animation: victoria 2s infinite alternate;
     }
-    #siguiente:hover {
-        background-color: #27ae60;
+
+    /* Animación de victoria */
+    @keyframes victoria {
+      from { box-shadow: 0 0 25px #0ff, inset 0 0 10px #0ff; }
+      to { box-shadow: 0 0 50px #5ff, inset 0 0 25px #5ff; }
     }
-    .puntaje {
-        margin-top: 15px;
-        font-size: 16px;
+
+    .item {
+      margin: 5px;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 8px;
+      border: 1px solid #555;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      font-size: 14px;
+      color: #eee;
     }
-</style>
+
+    .item:hover {
+      transform: scale(1.1);
+      background: #444;
+      box-shadow: 0 0 10px #0ff;
+    }
+
+    .estado {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-    <h1>Juego de Bienestar Digital</h1>
-    <div id="pregunta" class="pregunta"></div>
-    <div class="opciones">
-        <button id="opcionA">A</button>
-        <button id="opcionB">B</button>
-        <button id="opcionC">C</button>
-        <button id="opcionD">D</button>
-    </div>
-    <div id="mensaje" class="mensaje"></div>
-    <button id="siguiente">Siguiente</button>
-    <div id="puntaje" class="puntaje">Puntaje: 0</div>
-</div>
+  <h1>⚡ Juego del Circuito Eléctrico ⚡</h1>
+  <p>Agrega electrodomésticos sin pasarte del límite (100).  
+  Si logras llegar a 100 exactos, ¡felicitaciones! 🎉</p>
 
-<script>
-const preguntas = [
-    {
-        pregunta: "¿Cuánto tiempo seguido es recomendable estar frente a la pantalla?",
-        opciones: {A: "Más de 4 horas", B: "No más de 45 minutos", C: "Todo el día", D: "2 horas seguidas"},
-        correcta: "B"
-    },
-    {
-        pregunta: "¿Qué hacer antes de dormir?",
-        opciones: {A: "Usar el celular", B: "Apagar pantallas", C: "Ver redes sociales", D: "Tomar café"},
-        correcta: "B"
-    },
-    {
-        pregunta: "¿Qué es bienestar digital?",
-        opciones: {A: "Usar mucho internet", B: "Equilibrio entre tecnología y salud", C: "Tener el celular siempre cerca", D: "Solo jugar videojuegos"},
-        correcta: "B"
-    },
-    {
-        pregunta: "¿Cuál es un hábito saludable frente a pantallas?",
-        opciones: {A: "Mirar el celular mientras comes", B: "Tomar descansos cada 45 minutos", C: "Dormir con la tablet encendida", D: "Revisar redes antes de levantarte"},
-        correcta: "B"
-    },
-    {
-        pregunta: "¿Qué es recomendable hacer durante el tiempo de ocio digital?",
-        opciones: {A: "Balancear con actividades al aire libre", B: "Pasar todo el día en redes", C: "Quedarse sentado sin moverse", D: "Jugar sin límites"},
-        correcta: "A"
-    },
-    {
-        pregunta: "Para cuidar la vista frente a pantallas, se recomienda:",
-        opciones: {A: "Mirar la pantalla de cerca siempre", B: "Parpadear menos", C: "Usar regla 20-20-20 (cada 20 min mirar 20 metros hacia adelante)", D: "Encender luz azul intensa"},
-        correcta: "C"
+  <div class="circuito" id="circuito">
+    <span id="mensaje">Circuito en funcionamiento 🔌</span>
+  </div>
+
+  <div>
+    <button class="item" onclick="agregar('💡 Lámpara', 10)">💡 Lámpara (+10)</button>
+    <button class="item" onclick="agregar('🔥 Calefactor', 40)">🔥 Calefactor (+40)</button>
+    <button class="item" onclick="agregar('📺 TV', 20)">📺 TV (+20)</button>
+    <button class="item" onclick="agregar('💻 PC', 25)">💻 PC (+25)</button>
+    <button class="item" onclick="agregar('🎛️ Microondas', 35)">🎛️ Microondas (+35)</button>
+    <button class="item" onclick="agregar('❄️ Heladera', 30)">❄️ Heladera (+30)</button>
+    <button class="item" onclick="agregar('🌀 Ventilador', 15)">🌀 Ventilador (+15)</button>
+    <button class="item" onclick="agregar('📻 Radio', 5)">📻 Radio (+5)</button>
+    <button class="item" onclick="agregar('🎮 Consola', 20)">🎮 Consola (+20)</button>
+    <button class="item" onclick="agregar('🍳 Tostadora', 25)">🍳 Tostadora (+25)</button>
+  </div>
+
+  <div class="estado">
+    Carga actual: <span id="carga">0</span> / 100
+  </div>
+
+  <script>
+    let cargaTotal = 0;
+    const limite = 100;
+    const cargaSpan = document.getElementById("carga");
+    const circuito = document.getElementById("circuito");
+    const mensaje = document.getElementById("mensaje");
+
+    function agregar(nombre, valor) {
+      if (cargaTotal >= limite) return; // No permite seguir si ya terminó
+
+      cargaTotal += valor;
+      cargaSpan.textContent = cargaTotal;
+
+      let nuevo = document.createElement("div");
+      nuevo.textContent = nombre;
+      nuevo.style.color = "#0f0";
+      nuevo.style.fontSize = "14px";
+      circuito.appendChild(nuevo);
+
+      if (cargaTotal > limite) {
+        circuito.classList.add("apagado");
+        mensaje.textContent = "💥 ¡La tensión cayó! Circuito apagado.";
+        mensaje.style.color = "red";
+      } else if (cargaTotal === limite) {
+        circuito.classList.add("feliz");
+        mensaje.textContent = "🎉 ¡Felicitaciones! Lograste conectar todo sin sobrecargar.";
+        mensaje.style.color = "cyan";
+      }
     }
-];
-
-let preguntaActual = 0;
-let puntaje = 0;
-
-const preguntaDiv = document.getElementById('pregunta');
-const mensajeDiv = document.getElementById('mensaje');
-const puntajeDiv = document.getElementById('puntaje');
-const botones = {
-    A: document.getElementById('opcionA'),
-    B: document.getElementById('opcionB'),
-    C: document.getElementById('opcionC'),
-    D: document.getElementById('opcionD')
-};
-const siguienteBtn = document.getElementById('siguiente');
-
-function mostrarPregunta() {
-    if(preguntaActual >= preguntas.length) {
-        preguntaDiv.textContent = "¡Juego terminado!";
-        mensajeDiv.textContent = `Tu puntaje final es: ${puntaje} de ${preguntas.length}`;
-        Object.values(botones).forEach(b => b.disabled = true);
-        siguienteBtn.disabled = true;
-        return;
-    }
-    const q = preguntas[preguntaActual];
-    preguntaDiv.textContent = q.pregunta;
-    botones.A.textContent = `A) ${q.opciones.A}`;
-    botones.B.textContent = `B) ${q.opciones.B}`;
-    botones.C.textContent = `C) ${q.opciones.C}`;
-    botones.D.textContent = `D) ${q.opciones.D}`;
-    mensajeDiv.textContent = "";
-    Object.values(botones).forEach(b => b.disabled = false);
-}
-
-function verificarRespuesta(letra) {
-    const q = preguntas[preguntaActual];
-    if(letra === q.correcta) {
-        mensajeDiv.textContent = "¡Correcto!";
-        puntaje++;
-    } else {
-        mensajeDiv.textContent = `Incorrecto. La respuesta correcta era ${q.correcta}) ${q.opciones[q.correcta]}`;
-    }
-    puntajeDiv.textContent = `Puntaje: ${puntaje}`;
-    Object.values(botones).forEach(b => b.disabled = true);
-    preguntaActual++;
-}
-
-// Eventos de los botones
-botones.A.addEventListener('click', () => verificarRespuesta('A'));
-botones.B.addEventListener('click', () => verificarRespuesta('B'));
-botones.C.addEventListener('click', () => verificarRespuesta('C'));
-botones.D.addEventListener('click', () => verificarRespuesta('D'));
-siguienteBtn.addEventListener('click', mostrarPregunta);
-
-// Mostrar la primera pregunta al cargar la página
-mostrarPregunta();
-</script>
+  </script>
 </body>
 </html>
