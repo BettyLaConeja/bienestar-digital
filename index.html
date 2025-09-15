@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego del Circuito Eléctrico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    .circuito {
+      margin: 20px auto;
+      width: 520px;
+      min-height: 240px;
+      background: linear-gradient(135deg, #1a1a1a, #222, #111);
+      border: 4px solid #0f0;
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 10px;
+      transition: background 0.5s, border 0.5s, box-shadow 0.5s;
+      box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0;
+      animation: energia 3s infinite linear;
+    }
+
+    /* Animación de energía */
+    @keyframes energia {
+      0% { box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0; }
+      50% { box-shadow: 0 0 35px #0ff, inset 0 0 15px #0ff; }
+      100% { box-shadow: 0 0 20px #0f0, inset 0 0 10px #0f0; }
+    }
+
+    .apagado {
+      background: #220000 !important;
+      border: 4px solid #f00 !important;
+      box-shadow: 0 0 25px #f00, inset 0 0 10px #f00 !important;
+      animation: parpadeo 0.5s infinite alternate;
+    }
+
+    /* Efecto parpadeo cuando explota */
+    @keyframes parpadeo {
+      from { opacity: 1; }
+      to { opacity: 0.7; }
+    }
+
+    .feliz {
+      background: #003300 !important;
+      border: 4px solid #0ff !important;
+      box-shadow: 0 0 40px #0ff, inset 0 0 20px #0ff !important;
+      animation: victoria 2s infinite alternate;
+    }
+
+    /* Animación de victoria */
+    @keyframes victoria {
+      from { box-shadow: 0 0 25px #0ff, inset 0 0 10px #0ff; }
+      to { box-shadow: 0 0 50px #5ff, inset 0 0 25px #5ff; }
+    }
+
+    .item {
+      margin: 5px;
+      padding: 10px 15px;
+      background: #333;
+      border-radius: 8px;
+      border: 1px solid #555;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      font-size: 14px;
+      color: #eee;
+    }
+
+    .item:hover {
+      transform: scale(1.1);
+      background: #444;
+      box-shadow: 0 0 10px #0ff;
+    }
+
+    .estado {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚡ Juego del Circuito Eléctrico ⚡</h1>
+  <p>Agrega electrodomésticos sin pasarte del límite (100).  
+  Si logras llegar a 100 exactos, ¡felicitaciones! 🎉</p>
+
+  <div class="circuito" id="circuito">
+    <span id="mensaje">Circuito en funcionamiento 🔌</span>
+  </div>
+
+  <div>
+    <button class="item" onclick="agregar('💡 Lámpara', 10)">💡 Lámpara (+10)</button>
+    <button class="item" onclick="agregar('🔥 Calefactor', 40)">🔥 Calefactor (+40)</button>
+    <button class="item" onclick="agregar('📺 TV', 20)">📺 TV (+20)</button>
+    <button class="item" onclick="agregar('💻 PC', 25)">💻 PC (+25)</button>
+    <button class="item" onclick="agregar('🎛️ Microondas', 35)">🎛️ Microondas (+35)</button>
+    <button class="item" onclick="agregar('❄️ Heladera', 30)">❄️ Heladera (+30)</button>
+    <button class="item" onclick="agregar('🌀 Ventilador', 15)">🌀 Ventilador (+15)</button>
+    <button class="item" onclick="agregar('📻 Radio', 5)">📻 Radio (+5)</button>
+    <button class="item" onclick="agregar('🎮 Consola', 20)">🎮 Consola (+20)</button>
+    <button class="item" onclick="agregar('🍳 Tostadora', 25)">🍳 Tostadora (+25)</button>
+  </div>
+
+  <div class="estado">
+    Carga actual: <span id="carga">0</span> / 100
+  </div>
+
+  <script>
+    let cargaTotal = 0;
+    const limite = 100;
+    const cargaSpan = document.getElementById("carga");
+    const circuito = document.getElementById("circuito");
+    const mensaje = document.getElementById("mensaje");
+
+    function agregar(nombre, valor) {
+      if (cargaTotal >= limite) return; // No permite seguir si ya terminó
+
+      cargaTotal += valor;
+      cargaSpan.textContent = cargaTotal;
+
+      let nuevo = document.createElement("div");
+      nuevo.textContent = nombre;
+      nuevo.style.color = "#0f0";
+      nuevo.style.fontSize = "14px";
+      circuito.appendChild(nuevo);
+
+      if (cargaTotal > limite) {
+        circuito.classList.add("apagado");
+        mensaje.textContent = "💥 ¡La tensión cayó! Circuito apagado.";
+        mensaje.style.color = "red";
+      } else if (cargaTotal === limite) {
+        circuito.classList.add("feliz");
+        mensaje.textContent = "🎉 ¡Felicitaciones! Lograste conectar todo sin sobrecargar.";
+        mensaje.style.color = "cyan";
+      }
+    }
+  </script>
+</body>
+</html>
